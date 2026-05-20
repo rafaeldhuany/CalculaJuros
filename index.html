@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Juros Compostos</title>
+
+    <script>
+        function getCookie(name) {
+            const nameEQ = name + "=";
+            const ca = document.cookie.split(';');
+            for(let i = 0; i < ca.length; i++) {
+                let c = ca[i];
+                while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+                if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+            }
+            return null;
+        }
+
+        const savedTheme = getCookie('theme');
+        if (savedTheme === 'dark') {
+            document.documentElement.classList.add('dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+        }
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        site: {
+                            base: 'var(--site-base)',
+                            card: 'var(--site-card)',
+                            border: 'var(--site-border)',
+                            input: 'var(--site-input)',
+                            text: 'var(--site-text)',
+                            muted: 'var(--site-muted)',
+                            accent: 'var(--site-accent)',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body class="site-body">
+
+    <header class="site-header">
+        <div class="px-layout header-container">
+            <div class="logo-wrapper">
+                <i data-lucide="calculator" class="icon-md text-primary"></i>
+                <span class="logo-text">Calcula Juros</span>
+            </div>
+            
+            <div class="header-actions">
+                <button id="themeToggle" class="theme-btn" aria-label="Alternar Tema">
+                    <i data-lucide="sun" id="iconSun" class="icon-sun"></i>
+                    <i data-lucide="moon" id="iconMoon" class="icon-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="site-main px-layout">
+        
+        <div class="page-header">
+            <div class="title-container">
+                <div>
+                    <h1 class="page-title">Calculadora de Juros Compostos</h1>
+                    <p class="page-desc">
+                        Simule o crescimento do seu patrimônio com aportes mensais constantes e descubra o poder dos juros compostos no longo prazo.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="main-grid">
+            
+            <div class="col-sidebar">
+                <div class="card-base card-padding-lg">
+                    <h2 class="section-title">
+                        <i data-lucide="sliders-horizontal" class="icon-md"></i>
+                        Parâmetros da Simulação
+                    </h2>
+
+                    <form id="calcForm" onsubmit="return false;" class="form-layout">
+                        
+                        <div>
+                            <label class="input-label">Valor Inicial</label>
+                            <div class="input-wrapper input-focus-effect">
+                                <div class="input-prefix-box">
+                                    <span class="prefix-symbol">R$</span>
+                                </div>
+                                <input type="number" id="valorInicial" step="0.01" min="0" placeholder="0,00" class="input-core input-with-prefix">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="input-label">Aporte Mensal</label>
+                            <div class="input-wrapper input-focus-effect">
+                                <div class="input-prefix-box">
+                                    <span class="prefix-symbol">R$</span>
+                                </div>
+                                <input type="number" id="aporteMensal" step="0.01" min="0" placeholder="0,00" class="input-core input-with-prefix">
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="input-label">Rentabilidade (%)</label>
+                            <div class="input-flex-group input-focus-effect">
+                                <input type="number" id="taxaJuros" step="0.01" min="0" placeholder="0.0" class="input-grouped-left">
+                                <select id="tipoTaxa" class="select-grouped-right px-3-select">
+                                    <option value="anual">Anual</option>
+                                    <option value="mensal">Mensal</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div>
+                            <label class="input-label">Tempo de Investimento</label>
+                            <div class="input-flex-group input-focus-effect">
+                                <input type="number" id="periodo" min="1" placeholder="0" class="input-grouped-left">
+                                <select id="tipoPeriodo" class="select-grouped-right px-4-select">
+                                    <option value="anos">Anos</option>
+                                    <option value="meses">Meses</option>
+                                </select>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+
+            <div class="col-content">
+                
+                <div class="results-grid">
+                    
+                    <div class="card-base card-padding-md">
+                        <div class="flex-col-between">
+                            <div class="result-head-primary">
+                                <i data-lucide="wallet" class="icon-sm"></i>
+                                <span class="result-title">Patrimônio Total</span>
+                            </div>
+                            <div id="resFinalTotal" class="value-large">R$&nbsp;0,00</div>
+                        </div>
+                    </div>
+
+                    <div class="card-base card-padding-md">
+                        <div class="flex-col-between">
+                            <div class="result-head-muted">
+                                <i data-lucide="piggy-bank" class="icon-sm"></i>
+                                <span class="result-title">Total Aportado</span>
+                            </div>
+                            <div id="resFinalInvestido" class="value-medium color-muted">R$&nbsp;0,00</div>
+                        </div>
+                    </div>
+
+                    <div class="card-base card-padding-md">
+                        <div class="flex-col-between">
+                            <div class="result-head-success">
+                                <i data-lucide="trending-up" class="icon-sm"></i>
+                                <span class="result-title color-muted">Rendimento</span>
+                            </div>
+                            <div id="resFinalJuros" class="value-medium color-success">R$&nbsp;0,00</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card-base chart-card">
+                    <div class="chart-head-flex">
+                        <h3 class="chart-title-text">Evolução Patrimonial</h3>
+                        <div class="legend-box">
+                            <div class="legend-item">
+                                <span class="legend-dot-total"></span>
+                                <span class="legend-label">Total</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-dot-invest"></span>
+                                <span class="legend-label">Investido</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div id="chartPlaceholder" class="placeholder-area hidden-toggle">
+                        <div class="placeholder-icon-bg">
+                            <i data-lucide="bar-chart-2" class="icon-xl"></i>
+                        </div>
+                        <p class="placeholder-text">Defina os valores para simular</p>
+                    </div>
+
+                    <div class="chart-canvas-wrapper hidden" id="chartContainer">
+                        <canvas id="investChart"></canvas>
+                    </div>
+                </div>
+
+                <div id="tableContainerWrapper" class="hidden">
+                    <div class="card-base table-overflow-card">
+                        <button id="btnToggleTable" class="table-btn">
+                            <span class="table-btn-title">Extrato Mensal</span>
+                            <div class="table-btn-actions">
+                                <span id="txtToggleTable">Ver detalhes</span>
+                                <i data-lucide="chevron-down" class="icon-chevron" id="iconToggleTable"></i>
+                            </div>
+                        </button>
+
+                        <div id="tableContent" class="hidden table-scroll-area custom-scrollbar">
+                            <table class="data-table">
+                                <thead class="data-thead">
+                                    <tr>
+                                        <th class="data-th">Período</th>
+                                        <th class="data-th">Rendimento</th>
+                                        <th class="data-th">Aportado</th>
+                                        <th class="data-th-primary">Total Acumulado</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tableBody" class="data-tbody">
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="site-footer">
+        <div class="px-layout footer-inner">
+            <p>&copy; 2026 <strong>Calcula Juros</strong>.</p>
+            <p class="result-title">
+                Desenvolvido por <span class="text-highlight">Rafael Dhuany</span>.
+            </p>
+        </div>
+    </footer>
+
+    <script src="assets/js/main.js"></script>
+
+</body>
+</html>
