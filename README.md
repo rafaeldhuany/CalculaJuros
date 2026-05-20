@@ -2,7 +2,7 @@
 
 **Calcula Juros** é uma calculadora financeira interativa projetada para simular o crescimento do seu patrimônio de forma clara e visual. Nascida da necessidade de facilitar o planejamento financeiro, a ferramenta permite que você entenda o poder dos juros compostos no longo prazo através de aportes mensais constantes, tudo em uma interface moderna e responsiva.
 
-Ou teste a Yeldra diretamente no navegador:
+teste a ferramenta diretamente no navegador:
 👉 https://ovacilo.github.io/CalculaJuros/
 
 ---
@@ -35,12 +35,12 @@ O sistema foi construído focando em performance, modularidade e design profissi
 
 ## ⚙️ Como Executar o Projeto Localmente
 
-A Yeldra foi construída para ser incrivelmente simples e portátil. Você pode executá-la de duas maneiras, dependendo do seu nível de conforto e ferramentas disponíveis:
+A Calcula Juros foi construída para ser incrivelmente simples e portátil. Você pode executá-la de duas maneiras, dependendo do seu nível de conforto e ferramentas disponíveis:
 
 ### Opção 1: Execução Direta no Navegador (Mais Rápido e Offline)
 Como o sistema é 100% Client-Side, você não precisa de nenhum software adicional para rodá-lo.
 1. Baixe este repositório em formato `.zip` clicando em "Code" > "Download ZIP" no GitHub.
-2. Extraia a pasta `Yeldra` (ou o nome que deu ao repositório) no seu computador.
+2. Extraia a pasta `Calcula Juros` (ou o nome que deu ao repositório) no seu computador.
 3. Dê um clique duplo no arquivo `index.html` (ou arraste-o para o seu navegador favorito, como Chrome, Firefox ou Edge).
 4. O sistema abrirá diretamente no navegador e já estará funcionando.
 
