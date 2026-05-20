@@ -3,7 +3,7 @@
 **Calcula Juros** é uma calculadora financeira interativa projetada para simular o crescimento do seu patrimônio de forma clara e visual. Nascida da necessidade de facilitar o planejamento financeiro, a ferramenta permite que você entenda o poder dos juros compostos no longo prazo através de aportes mensais constantes, tudo em uma interface moderna e responsiva.
 
 teste a ferramenta diretamente no navegador:
-👉 https://ovacilo.github.io/CalculaJuros/
+👉 https://rafaeldhuany.github.io/CalculaJuros/
 
 ---
 
